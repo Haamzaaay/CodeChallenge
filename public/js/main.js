@@ -1,12 +1,12 @@
 var skipCounter = 0;
-var takeAmount = 10;
+var limit = 5;
 
 function sendRequest(suggestionId) {
   ajax(`/send-request/${suggestionId}`, 'GET', 'getSuggestions')
 }
 
 function getRequests() {
-  ajax('/requests', 'GET', 'requestsIndex')
+  ajax(`/requests?limit=${limit}`, 'GET', 'requestsIndex')
 }
 
 function requestsIndex(exampleVariable, response) {
@@ -32,7 +32,7 @@ function acceptRequest(requestId) {
 }
 
 function getSuggestions() {
-  ajax('/suggestions', 'GET', 'suggestionsIndex')
+  ajax(`/suggestions?limit=${limit}`, 'GET', 'suggestionsIndex')
 }
 
 function suggestionsIndex(exampleVariable, response) {
@@ -41,12 +41,16 @@ function suggestionsIndex(exampleVariable, response) {
 
   $('#get_suggestions_btn').html(`Suggestions ( ${response['total']} )`);
 
+  response['total'] < limit
+    ? $("#load_more_btn_parent").addClass('d-none')
+    : $("#load_more_btn_parent").removeClass('d-none');
+
   getRequests();
   getConnections();
 }
 
 function getConnections() {
-  ajax('/connections', 'GET', 'connectionsIndex')
+  ajax(`/connections?limit=${limit}`, 'GET', 'connectionsIndex')
 }
 
 function connectionsIndex(exampleVariable, response) {
@@ -92,6 +96,12 @@ function reRender() {
 $(function () {
   reRender()
 });
+
+function loadMore() {
+  limit += 10;
+
+  getSuggestions();
+}
 
 
 $(document).ajaxStop(function () {

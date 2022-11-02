@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class SuggestionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         [$requestsSent, $requestesReceived] =
             [
@@ -17,7 +17,9 @@ class SuggestionController extends Controller
             ];
 
         $suggestions = User::whereNotIn('id', array_merge($requestsSent, $requestesReceived))
-            ->get()->except(auth()->id());
+            ->limit($request->has('limit') ? $request->limit + 1 : 10)
+            ->get()
+            ->except(auth()->id());
 
         return response()->json([
             'total' => $suggestions->count(),

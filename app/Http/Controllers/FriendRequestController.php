@@ -4,16 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Enums\FriendRequestStatusEnum;
 use App\Models\FriendRequest;
+use Illuminate\Http\Request;
 
 class FriendRequestController extends Controller
 {
-    public function getRequests()
+    public function getRequests(Request $request)
     {
         $requestsSent = FriendRequest::whereSenderId(auth()->id())
-            ->whereStatus(FriendRequestStatusEnum::PENDING)->with('receiver')->get();
+            ->whereStatus(FriendRequestStatusEnum::PENDING)->with('receiver')
+            ->limit($request->has('limit') ? $request->limit + 1 : 10)
+            ->get();
 
         $requestsReceived = FriendRequest::whereReceiverId(auth()->id())
-            ->whereStatus(FriendRequestStatusEnum::PENDING)->with('sender')->get();
+            ->whereStatus(FriendRequestStatusEnum::PENDING)->with('sender')
+            ->limit($request->has('limit') ? $request->limit + 1 : 10)
+            ->get();
 
         return response()->json([
             [
