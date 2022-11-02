@@ -12,22 +12,20 @@ class FriendRequestController extends Controller
     {
         $requestsSent = FriendRequest::whereSenderId(auth()->id())
             ->whereStatus(FriendRequestStatusEnum::PENDING)->with('receiver')
-            ->limit($request->has('limit') ? $request->limit + 1 : 10)
-            ->get();
+            ->paginate($request->has('limit') ? $request->limit + 1 : 10);
 
         $requestsReceived = FriendRequest::whereReceiverId(auth()->id())
             ->whereStatus(FriendRequestStatusEnum::PENDING)->with('sender')
-            ->limit($request->has('limit') ? $request->limit + 1 : 10)
-            ->get();
+            ->paginate($request->has('limit') ? $request->limit + 1 : 10);
 
         return response()->json([
             [
-                'total' => $requestsSent->count(),
+                'total' => $requestsSent->total(),
                 'data' => view('components.request', ['requests' => $requestsSent, 'mode' => 'sent'])->render()
 
             ],
             [
-                'total' => $requestsReceived->count(),
+                'total' => $requestsReceived->total(),
                 'data' => view('components.request', ['requests' => $requestsReceived, 'mode' => 'received'])->render()
 
             ],

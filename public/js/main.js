@@ -1,5 +1,5 @@
 var skipCounter = 0;
-var limit = 5;
+var limit = 10;
 
 function sendRequest(suggestionId) {
   ajax(`/send-request/${suggestionId}`, 'GET', 'getSuggestions')

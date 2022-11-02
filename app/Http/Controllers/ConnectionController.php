@@ -15,11 +15,10 @@ class ConnectionController extends Controller
             ->orWhere('receiver_id', auth()->id())
             ->whereStatus(FriendRequestStatusEnum::ACCEPTED)
             ->with(['sender', 'receiver'])
-            ->limit($request->has('limit') ? $request->limit + 1 : 10)
-            ->get();
+            ->paginate($request->has('limit') ? $request->limit + 1 : 10);
 
         return response()->json([
-            'total' => $connections->count(),
+            'total' => $connections->total(),
             'data' => view('components.connection', ['connections' => $connections])->render()
         ], 200);
     }

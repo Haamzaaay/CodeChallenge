@@ -16,13 +16,11 @@ class SuggestionController extends Controller
                 FriendRequest::where('receiver_id', auth()->id())->pluck('sender_id')->toArray()
             ];
 
-        $suggestions = User::whereNotIn('id', array_merge($requestsSent, $requestesReceived))
-            ->limit($request->has('limit') ? $request->limit + 1 : 10)
-            ->get()
-            ->except(auth()->id());
+        $suggestions = User::whereNotIn('id', array_merge($requestsSent, $requestesReceived, [auth()->id()]))
+            ->paginate($request->has('limit') ? $request->limit + 1 : 10);
 
         return response()->json([
-            'total' => $suggestions->count(),
+            'total' => $suggestions->total(),
             'data' => view('components.suggestion', ['suggestions' => $suggestions])->render()
         ], 200);
     }
