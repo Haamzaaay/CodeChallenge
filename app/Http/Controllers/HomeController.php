@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FriendRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +25,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $lazyLoadedUserModel = auth()->user()->load(['sentRequests', 'receivedRequests']);
+
+        $statistics['suggestions'] = User::all();
+        $statistics['user_with_relations'] = $lazyLoadedUserModel;
+
+        return view('home', [
+            'statistics' => $statistics
+        ]);
     }
 }
