@@ -8,6 +8,6 @@
 
     <div class="container">
         <x-dashboard />
-        <x-network_connections :statistics="$statistics" />
+        <x-network_connections />
     </div>
 @endsection

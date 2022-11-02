@@ -25,13 +25,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $lazyLoadedUserModel = auth()->user()->load(['sentRequests', 'receivedRequests']);
-
-        $statistics['suggestions'] = User::all();
-        $statistics['user_with_relations'] = $lazyLoadedUserModel;
-
-        return view('home', [
-            'statistics' => $statistics
-        ]);
+        return view('home');
     }
 }
