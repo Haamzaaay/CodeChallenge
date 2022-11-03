@@ -16,7 +16,7 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(100)->create();
+        User::factory(5)->create();
 
         User::firstOrCreate([
             'name' => 'Test User',
@@ -24,5 +24,20 @@ class UsersSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'email_verified_at' => now()
         ]);
+
+        User::firstOrCreate([
+            'name' => 'Test User 2',
+            'email' => 'test2@test.com',
+            'password' => Hash::make('12345678'),
+            'email_verified_at' => now()
+        ]);
+
+        User::firstOrCreate([
+            'name' => 'Test User 3',
+            'email' => 'test3@test.com',
+            'password' => Hash::make('12345678'),
+            'email_verified_at' => now()
+        ]);
+
     }
 }

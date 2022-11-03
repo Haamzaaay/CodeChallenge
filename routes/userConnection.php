@@ -20,7 +20,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('/suggestions', SuggestionController::class)->only(['index', 'store']);
-    Route::resource('/connections', ConnectionController::class);
+    Route::resource('/connections', ConnectionController::class)->only(['index', 'destroy']);
+    Route::get('/connections/common', [ConnectionController::class, 'getCommonConnections']);
 
     // Friend Request Routes
     Route::get('/requests', [FriendRequestController::class, 'getRequests']);
