@@ -16,4 +16,9 @@ enum FriendRequestStatusEnum: string
             self::PENDING,
         ];
     }
+
+    public static function getOnlyWarningStatuses(): array
+    {
+        return [self::REJECTED, self::PENDING];
+    }
 }
